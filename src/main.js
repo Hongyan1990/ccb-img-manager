@@ -4,7 +4,8 @@ import {
   Button, Container, Header, Main, Row, Col,
   Table, TableColumn, Dialog, Input, Form, FormItem,
   Tooltip, Upload, Loading, Message, Tabs, TabPane, Avatar,
-    Card, Pagination, DatePicker, Select, Option, Menu, MenuItem
+    Card, Pagination, DatePicker, Select, Option, Menu, MenuItem,
+  Drawer, Image
 } from 'element-ui'
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VePie from 'v-charts/lib/pie.common'
@@ -45,6 +46,8 @@ Vue.use(Select)
 Vue.use(Option)
 Vue.use(Menu)
 Vue.use(MenuItem)
+Vue.use(Drawer)
+Vue.use(Image)
 Vue.prototype.$message = Message
 
 new Vue({
