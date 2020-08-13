@@ -7,7 +7,7 @@
               type="primary"
               icon="el-icon-plus"
               @click="showDialog=true"
-              size="small">新增Banner</el-button>
+              size="small">新增专题</el-button>
         </el-col>
       </el-row>
       <el-table
@@ -17,29 +17,41 @@
           <template slot-scope="props">
             <div>
               <el-row :gutter="10" style="font-weight: bold;">
-                <el-col :span="6">图片名称</el-col>
-                <el-col :span="6">链接</el-col>
-                <el-col :span="6">登录类型</el-col>
-                <el-col :span="6">轮播时间</el-col>
+                <el-col :span="4">文章编号</el-col>
+                <el-col :span="4">文章标题</el-col>
+                <el-col :span="4">文章作者</el-col>
+                <el-col :span="4">发表时间</el-col>
+                <el-col :span="4">文章摘要</el-col>
+                <el-col :span="4">原文链接</el-col>
               </el-row>
               <el-row :gutter="10" v-for="item in props.row.picGrid" :key="item.picName" style="line-height: 35px;">
                 <el-tooltip class="item" effect="dark" :content="item.picName||'图片名称'" placement="top-start">
-                  <el-col :span="6">
+                  <el-col :span="4">
                     <span class="item-single">{{item.picName}}</span>
                   </el-col>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" :content="item.picName||'跳转链接'" placement="top-start">
-                  <el-col :span="6">
+                  <el-col :span="4">
                     <span class="item-single">{{item.picUrl}}</span>
                   </el-col>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" :content="item.picName||'登录类型'" placement="top-start">
-                  <el-col :span="6">
+                  <el-col :span="4">
                     <span class="item-single">{{item.loginType}}</span>
                   </el-col>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" :content="item.picName||'轮播时间'" placement="top-start">
-                  <el-col :span="6">
+                  <el-col :span="4">
+                    <span class="item-single">{{item.picStayTime}}s</span>
+                  </el-col>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" :content="item.picName||'登录类型'" placement="top-start">
+                  <el-col :span="4">
+                    <span class="item-single">{{item.loginType}}</span>
+                  </el-col>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" :content="item.picName||'轮播时间'" placement="top-start">
+                  <el-col :span="4">
                     <span class="item-single">{{item.picStayTime}}s</span>
                   </el-col>
                 </el-tooltip>
@@ -48,16 +60,12 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="banner编号"
+            label="专题编号"
             prop="id">
         </el-table-column>
         <el-table-column
-            label="版本号"
+            label="专题名"
             prop="name">
-        </el-table-column>
-        <el-table-column
-            label="描述"
-            prop="desc">
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
@@ -71,16 +79,16 @@
         </el-table-column>
       </el-table>
     </div>
-    <add-banner :dialog="showDialog" @closeAddBannerDialog="closeAddBannerDialog" />
+    <add-topic :dialog="showDialog" @closeAddTopicDialog="closeAddTopicDialog" />
   </div>
 </template>
 
 <script>
-  import AddBanner from "./AddBanner.vue";
+  import AddTopic from "./AddTopic.vue";
   export default {
-    name: "BannerMaintain",
+    name: "Topic",
     components: {
-      AddBanner
+      AddTopic
     },
     data() {
       return {
@@ -109,7 +117,7 @@
       }
     },
     methods: {
-      closeAddBannerDialog() {
+      closeAddTopicDialog() {
         this.showDialog = false;
       }
     }

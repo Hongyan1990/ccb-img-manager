@@ -11,22 +11,29 @@
     >
       <div class="demo-drawer__content">
         <div style="flex: 1">
-          <el-form :model="form">
-            <el-form-item label="购买数量" :label-width="formLabelWidth">
-              <el-input v-model="form.count" autocomplete="off"></el-input>
+          <el-form ref="numberValidateForm" :model="form">
+            <el-form-item prop="bannerNo" label="Banner编号" :label-width="formLabelWidth">
+              <el-input v-model="form.bannerNo" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item prop="versionNo" label="版本号" :label-width="formLabelWidth">
+              <el-input v-model="form.versionNo" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item prop="describe" label="描述" :label-width="formLabelWidth">
+              <el-input type="textarea" v-model="form.describe" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="增加banner" :label-width="formLabelWidth">
-              <el-button type="primary" @click="addBanner">增加banner</el-button>
+              <el-button plain type="primary" @click="addBanner" icon="el-icon-plus">增加banner</el-button>
             </el-form-item>
           </el-form>
-          <my-drag :bannerList="banners"></my-drag>
+          <my-drag :bannerList="banners" @showRoomDialog="showRoomDialog"></my-drag>
         </div>
-
-        <p style="color: red; font-size: 12px;">提示： 2小时内可以撤销订单</p>
         <div class="demo-drawer__footer">
           <el-button @click="cancelForm">取 消</el-button>
           <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
         </div>
+        <el-dialog :visible.sync="dialogVisible" :modal="false">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
       </div>
     </el-drawer>
   </div>
@@ -48,14 +55,15 @@
     data() {
       return {
         form: {
-          count: '',
-          region: '',
-          desc: '',
-          num: ''
+          bannerNo: '',
+          versionNo: '',
+          describe: '',
         },
         loading: false,
         formLabelWidth: '120px',
-        banners: []
+        banners: [],
+        dialogImageUrl:'',
+        dialogVisible: false
       }
     },
     computed: {
@@ -70,9 +78,13 @@
     },
     methods: {
       handleClose(done) {
+        console.log(this.banners)
         done()
       },
       cancelForm() {
+        this.$refs['numberValidateForm'].resetFields();
+        console.log(this.form)
+        this.banners = [];
         this.$emit('closeAddBannerDialog')
       },
       addBanner() {
@@ -80,9 +92,15 @@
           id: new Date().getTime(),
           imgNm: '',
           imgPath: '',
-          link: '',
-          fileList: []
+          picUrl: '',
+          fileList: [],
+          imgUrl: '',
+          picStayTime: ''
         })
+      },
+      showRoomDialog(url) {
+        this.dialogVisible = true;
+        this.dialogImageUrl = url;
       }
     }
   }

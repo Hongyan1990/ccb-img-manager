@@ -12,6 +12,10 @@ const routes = [
 	{
 		path: '/banner',
 		component: () => import('../views/BannerMaintain.vue')
+	},
+	{
+		path: '/topic',
+		component: () => import('../views/Topic.vue')
 	}
 ]
 

@@ -1,42 +1,54 @@
 <template>
-  <ul class="list" id="list">
-    <li v-for="(item,index) in bannerList">
-      <p class="my-item">
-        <i class="el-icon-rank my-rank"></i>
-<!--        <span class="my-img">-->
-<!--          <el-image-->
-<!--              v-if="url"-->
-<!--              style="width: 40px; height: 40px"-->
-<!--              :src="url"-->
-<!--              fit="fill">-->
-<!--          </el-image>-->
-<!--          <span v-else>请上传图片</span>-->
-<!--        </span>-->
-        <el-upload
-            class="upload-demo"
-            ref="upload"
-            action="other"
-            list-type="picture"
-            :file-list="item.fileList"
-            :show-file-list="true"
-            :auto-upload="false">
-
-          <div class="my-demo" slot="file" slot-scope="{file}">
+    <ul class="list" id="list">
+      <li v-for="(item,i) in bannerList">
+        <p class="my-item">
+          <i class="el-icon-rank my-rank"></i>
+          <span class="my-img">
             <el-image
-                v-if="file.url"
+                v-if="item.imgUrl"
                 style="width: 40px; height: 40px"
-                :src="file.url"
+                :src="item.imgUrl"
                 fit="fill">
             </el-image>
-          </div>
-          <i slot="default" class="el-icon-plus"></i>
-        </el-upload>
-        <el-input size="mini" v-model="item.imgNm" placeholder="请输入内容"></el-input>
-        <el-input size="mini" v-model="item.link" placeholder="请输入内容"></el-input>
+            <span v-else>请上传图片</span>
+            <span
+              class="el-upload-list__item-preview"
+              @click="handlePictureCardPreview(i)"
+            >
+              <i class="el-icon-zoom-in my-zoom"></i>
+            </span>
+          </span>
+          <el-upload
+              class="upload-demo"
+              ref="upload"
+              action="other"
+              :on-change="handleChange"
+              :file-list="item.fileList"
+              :show-file-list="false"
+              :auto-upload="false">
+            <i slot="default" style="margin-right: 10px;" class="el-icon-plus" @click="index=i"></i>
+          </el-upload>
+          <el-tooltip class="item" effect="dark" :content="item.imgNm||'图片名称'" placement="top-start">
+            <el-input class="my-input" size="mini" v-model="item.imgNm" placeholder="图片名称"></el-input>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="item.picUrl||'跳转链接'" placement="top-start">
+            <el-input class="my-input" size="mini" v-model="item.picUrl" placeholder="跳转链接"></el-input>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="轮播时间（S）" placement="top-start">
+            <el-input class="my-input" size="mini" v-model="item.picStayTime" placeholder="轮播时间（S）"></el-input>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="请选择登录方式" placement="top-start">
+            <el-select class="my-input" size="mini" v-model="item.loginType" placeholder="请选择登录方式">
+              <el-option label="不登录" value="0"></el-option>
+              <el-option label="密码登录" value="1"></el-option>
+              <el-option label="token登录" value="2"></el-option>
+            </el-select>
+          </el-tooltip>
 
-      </p>
-    </li>
-  </ul>
+          <i class="el-icon-delete my-del" @click="deleteBanner(i)"></i>
+        </p>
+      </li>
+    </ul>
 </template>
 
 <script>
@@ -52,7 +64,8 @@
       return {
         uwasc:true,
         idx:'1',
-        url: ''
+        url: '',
+        index: 0,
       }
     },
     mounted () {
@@ -83,13 +96,23 @@
       })
     },
     methods:{
-      btnUp(index){
-        var item = this.items[index];
-        this.items.splice(index,1);
-        this.items.unshift(item);
-      },
       handleChange(file, fileList) {
-        console.log(file.url, fileList)
+        console.log(file, fileList, this.index);
+        let fileName = file? file.name: null;
+        const i = this.index;
+        if(fileName) {
+          this.bannerList[i].imgUrl = URL.createObjectURL(file.raw)
+          this.bannerList[i].imgNm = new Date().getTime() + fileName
+        }
+
+      },
+      handlePictureCardPreview(i) {
+        const url = this.bannerList[i].imgUrl;
+        if(!url) return;
+        this.$emit('showRoomDialog', url)
+      },
+      deleteBanner(i) {
+        this.bannerList.splice(i, 1)
       }
     },
     destroyed() {
@@ -102,6 +125,10 @@
 .blue-background-class {
   background: aqua;
 }
+  .list {
+    max-height: 200px;
+    overflow: auto;
+  }
   .list li {
     list-style: none;
   }
@@ -122,12 +149,14 @@
   .my-img {
     min-width: 40px;
     height: 40px;
+    max-width: 40px;
     display: inline-block;
     margin-right: 10px;
     border: 1px solid #ccc;
     text-align: center;
     border-radius: 5px;
     font-size: 12px;
+    position: relative;
   }
   /deep/.el-upload-list--picture li{
     padding: 0!important;
@@ -136,5 +165,33 @@
   .upload-demo {
     display: flex;
     justify-content: center;
+  }
+  .el-upload-list__item-preview {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    font-size: 20px;
+    background-color: rgba(0,0,0,.5);
+    transition: opacity .3s;
+    line-height: 1.8;
+  }
+  .my-img:hover .el-upload-list__item-preview{
+    opacity: 1;
+  }
+  .my-zoom {
+    cursor: pointer;
+  }
+  .my-input {
+    width: 150px;
+  }
+  .my-del {
+    cursor: pointer;
+    margin-left: 10px;
   }
 </style>

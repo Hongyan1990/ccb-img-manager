@@ -20,45 +20,62 @@
           <img :src="urlImg" style="width: 200px; margin-top: 20px;"/>
           <p style="margin: 0; line-height: 30px">暂无数据</p>
         </template>
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-        <el-table-column
-            label="活动图片">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="链接">
+                <span>{{ props.row.picUrl }}</span>
+              </el-form-item>
+              <el-form-item label="活动地址">
+                <span>{{ props.row.activityAddre }}</span>
+              </el-form-item>
+              <el-form-item label="生效时间">
+                <span>{{ props.row.takeEffectTime }}</span>
+              </el-form-item>
+              <el-form-item label="失效时间">
+                <span>{{ props.row.loseEfficacyTime }}</span>
+              </el-form-item>
+              <el-form-item label="描述">
+                <span>{{ props.row.describe }}</span>
+              </el-form-item>
+            </el-form>
           </template>
         </el-table-column>
         <el-table-column
-            label="生效时间">
+            label="启动页编号">
           <template slot-scope="scope">
-            <span>{{scope.row.shopname}}</span>
+            <span style="margin-left: 10px">{{ scope.row.startNo }}</span>
           </template>
         </el-table-column>
         <el-table-column
-            label="失效时间">
+            label="版本号">
           <template slot-scope="scope">
-            <span>{{scope.row.address}}</span>
+            <span>{{scope.row.versionNo}}</span>
           </template>
         </el-table-column>
         <el-table-column
-            label="推送范围">
+            label="图片名称">
           <template slot-scope="scope">
-            <span>{{scope.row.phone}}</span>
+            <span>{{scope.row.picName}}</span>
           </template>
         </el-table-column>
         <el-table-column
-            label="活动地址">
+            label="登录类型">
           <template slot-scope="scope">
-            <span>{{scope.row.open_time}}</span>
+            <span>{{loginTypeMap[scope.row.loginType]||''}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            label="显示时长">
+          <template slot-scope="scope">
+            <span>{{scope.row.showDuration}} s</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
                 size="mini"
-                type="primary" plain>修改</el-button>
+                type="primary" plain @click="editActive(scope)">修改</el-button>
             <el-button
                 size="mini"
                 type="danger" plain>删除</el-button>
@@ -76,6 +93,7 @@
     </div>
     <add-img
         :isShowDialog="dialogFormVisible"
+        :acitveData="acitveData"
         @closeCreateMenuDialog="closeCreateMenuDialog"
     />
   </div>
@@ -93,10 +111,16 @@
     data () {
       return {
         urlImg,
-        tableData: [{name: 'test'}],
+        tableData: [],
         loading: false,
         dialogFormVisible: false,
-        count: 0
+        count: 0,
+        acitveData: {},
+        loginTypeMap: {
+          '0': '不登录',
+          '1': '密码登录',
+          '2': 'token登录'
+        }
       }
     },
     computed: {},
@@ -104,7 +128,28 @@
       closeCreateMenuDialog() {
         this.dialogFormVisible = false
       },
-      changePage() {}
+      changePage() {},
+      editActive(rowData) {
+        console.log(rowData)
+        this.dialogFormVisible = true;
+        this.acitveData = {...rowData.row}
+      }
+    },
+    mounted() {
+      this.tableData = [
+        {
+          startNo: '01',
+          versionNo: '1.0.0',
+          describe: '这是一条测试数据',
+          picName: 'test.png',
+          picUrl: 'http://127.0.0.1:8000/test',
+          loginType: '0',
+          showDuration: '10',
+          takeEffectTime: '2020-08-13 17:07:00',
+          loseEfficacyTime: '2020-08-14 17:07:00',
+          activityAddre: '0'
+        }
+      ]
     }
   }
 </script>
@@ -124,5 +169,17 @@
   .search .page {
     margin-top: 15px;
     text-align: right;
+  }
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
   }
 </style>
