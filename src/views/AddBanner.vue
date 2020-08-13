@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-drawer
-        title="新增banner"
+        :title="bannerData? '修改banner':'新增banner'"
         :before-close="handleClose"
         :visible.sync="dialogVisibal"
         size="60%"
@@ -50,6 +50,10 @@
       dialog: {
         type: Boolean,
         default: false
+      },
+      bannerData: {
+        type: Object,
+        default: () => null
       }
     },
     data() {
@@ -76,9 +80,18 @@
         }
       }
     },
+    watch: {
+      'bannerData': 'handleBannerDataChange'
+    },
     methods: {
       handleClose(done) {
-        console.log(this.banners)
+        this.form['picGrid'] = this.banners.map(v => ({
+          picName: v.picName,
+          picUrl: v.picUrl,
+          loginType: v.loginType,
+          picStayTime: v.picStayTime
+        }))
+        console.log(this.form)
         done()
       },
       cancelForm() {
@@ -89,8 +102,8 @@
       },
       addBanner() {
         this.banners.push({
-          id: new Date().getTime(),
-          imgNm: '',
+          id: new Date().getTime() + '',
+          picName: '',
           imgPath: '',
           picUrl: '',
           fileList: [],
@@ -101,6 +114,16 @@
       showRoomDialog(url) {
         this.dialogVisible = true;
         this.dialogImageUrl = url;
+      },
+      handleBannerDataChange() {
+        const {bannerNo, versionNo, describe, picGrid} = this.bannerData;
+        this.form = {bannerNo, versionNo, describe};
+        this.banners = picGrid.map((v, i) => ({
+          id: new Date().getTime() + '' + i,
+          imgPath: '',
+          fileList: [],
+          ...v
+        }))
       }
     }
   }

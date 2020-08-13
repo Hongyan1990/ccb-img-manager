@@ -28,8 +28,8 @@
               :auto-upload="false">
             <i slot="default" style="margin-right: 10px;" class="el-icon-plus" @click="index=i"></i>
           </el-upload>
-          <el-tooltip class="item" effect="dark" :content="item.imgNm||'图片名称'" placement="top-start">
-            <el-input class="my-input" size="mini" v-model="item.imgNm" placeholder="图片名称"></el-input>
+          <el-tooltip class="item" effect="dark" :content="item.picName||'图片名称'" placement="top-start">
+            <el-input class="my-input" size="mini" v-model="item.picName" placeholder="图片名称"></el-input>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" :content="item.picUrl||'跳转链接'" placement="top-start">
             <el-input class="my-input" size="mini" v-model="item.picUrl" placeholder="跳转链接"></el-input>
@@ -102,7 +102,7 @@
         const i = this.index;
         if(fileName) {
           this.bannerList[i].imgUrl = URL.createObjectURL(file.raw)
-          this.bannerList[i].imgNm = new Date().getTime() + fileName
+          this.bannerList[i].picName = new Date().getTime() + fileName
         }
 
       },

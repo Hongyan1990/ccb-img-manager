@@ -49,29 +49,29 @@
         </el-table-column>
         <el-table-column
             label="banner编号"
-            prop="id">
+            prop="bannerNo">
         </el-table-column>
         <el-table-column
             label="版本号"
-            prop="name">
+            prop="versionNo">
         </el-table-column>
         <el-table-column
             label="描述"
-            prop="desc">
+            prop="describe">
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
                 size="mini"
-                type="primary" plain>修改</el-button>
+                type="primary" plain @click="editBanner(scope)">修改</el-button>
             <el-button
                 size="mini"
-                type="danger" plain>删除</el-button>
+                type="danger" plain @click="deleteBanner(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <add-banner :dialog="showDialog" @closeAddBannerDialog="closeAddBannerDialog" />
+    <add-banner :dialog="showDialog" :bannerData="bannerData" @closeAddBannerDialog="closeAddBannerDialog" />
   </div>
 </template>
 
@@ -86,9 +86,9 @@
       return {
         tableData: [
           {
-            id: '12987122',
-            name: '好滋好味鸡蛋仔',
-            desc: '荷兰优质淡奶，奶香浓而不腻',
+            bannerNo: '12987122',
+            versionNo: '好滋好味鸡蛋仔',
+            describe: '荷兰优质淡奶，奶香浓而不腻',
             picGrid: [
               {
                 picName: 'test.png',
@@ -105,12 +105,20 @@
             ]
           }
         ],
-        showDialog: false
+        showDialog: false,
+        bannerData: {}
       }
     },
     methods: {
       closeAddBannerDialog() {
         this.showDialog = false;
+      },
+      editBanner(rowData) {
+        this.showDialog = true;
+        this.bannerData = {...rowData.row};
+      },
+      deleteBanner(row) {
+
       }
     }
   }
