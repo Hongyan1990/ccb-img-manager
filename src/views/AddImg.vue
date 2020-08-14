@@ -180,8 +180,9 @@
   .demo-drawer__content {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 75%;
     padding: 20px;
+    overflow: auto;
   }
   .demo-drawer__content form {
     /*flex: 1;*/

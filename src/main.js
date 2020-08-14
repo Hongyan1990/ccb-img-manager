@@ -10,6 +10,11 @@ import {
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VePie from 'v-charts/lib/pie.common'
 
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 import App from './app.vue'
 // /home/hongyan/Desktop/hongyan/my-order/dist
 import router from './routes/router.js'
@@ -49,6 +54,8 @@ Vue.use(MenuItem)
 Vue.use(Drawer)
 Vue.use(Image)
 Vue.prototype.$message = Message
+
+Vue.use(VueQuillEditor)
 
 new Vue({
 	router,

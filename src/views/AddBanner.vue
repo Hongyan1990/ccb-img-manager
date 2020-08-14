@@ -95,6 +95,7 @@
         done()
       },
       cancelForm() {
+        this.form = {}
         this.$refs['numberValidateForm'].resetFields();
         console.log(this.form)
         this.banners = [];

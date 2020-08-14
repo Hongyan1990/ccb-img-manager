@@ -122,9 +122,9 @@
 </script>
 
 <style scoped>
-.blue-background-class {
-  background: aqua;
-}
+  .blue-background-class {
+    background: aqua;
+  }
   .list {
     max-height: 200px;
     overflow: auto;

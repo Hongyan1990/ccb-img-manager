@@ -24,35 +24,35 @@
                 <el-col :span="4">文章摘要</el-col>
                 <el-col :span="4">原文链接</el-col>
               </el-row>
-              <el-row :gutter="10" v-for="item in props.row.picGrid" :key="item.picName" style="line-height: 35px;">
-                <el-tooltip class="item" effect="dark" :content="item.picName||'图片名称'" placement="top-start">
-                  <el-col :span="4">
-                    <span class="item-single">{{item.picName}}</span>
+              <el-row :gutter="10" v-for="item in props.row.articleGrid" :key="item.picName" style="line-height: 35px;">
+                <el-tooltip class="item" effect="dark" :content="item.articleNo" placement="top-start">
+                  <el-col :span="4" class="item-single">
+                    <span>{{item.articleNo}}</span>
                   </el-col>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" :content="item.picName||'跳转链接'" placement="top-start">
-                  <el-col :span="4">
-                    <span class="item-single">{{item.picUrl}}</span>
+                <el-tooltip class="item" effect="dark" :content="item.articleTitle" placement="top-start">
+                  <el-col :span="4" class="item-single">
+                    <span>{{item.articleTitle}}</span>
                   </el-col>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" :content="item.picName||'登录类型'" placement="top-start">
-                  <el-col :span="4">
-                    <span class="item-single">{{item.loginType}}</span>
+                <el-tooltip class="item" effect="dark" :content="item.articleAuthor" placement="top-start">
+                  <el-col :span="4" class="item-single">
+                    <span>{{item.articleAuthor}}</span>
                   </el-col>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" :content="item.picName||'轮播时间'" placement="top-start">
-                  <el-col :span="4">
-                    <span class="item-single">{{item.picStayTime}}s</span>
+                <el-tooltip class="item" effect="dark" :content="item.publishTime" placement="top-start">
+                  <el-col :span="4" class="item-single">
+                    <span>{{item.publishTime}}s</span>
                   </el-col>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" :content="item.picName||'登录类型'" placement="top-start">
-                  <el-col :span="4">
-                    <span class="item-single">{{item.loginType}}</span>
+                <el-tooltip class="item" effect="dark" :content="item.articleAbstract" placement="top-start">
+                  <el-col :span="4" class="item-single">
+                    <span>{{item.articleAbstract}}</span>
                   </el-col>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" :content="item.picName||'轮播时间'" placement="top-start">
-                  <el-col :span="4">
-                    <span class="item-single">{{item.picStayTime}}s</span>
+                <el-tooltip class="item" effect="dark" :content="item.articleUrl" placement="top-start">
+                  <el-col :span="4" class="item-single">
+                    <span>{{item.articleUrl}}s</span>
                   </el-col>
                 </el-tooltip>
               </el-row>
@@ -61,25 +61,25 @@
         </el-table-column>
         <el-table-column
             label="专题编号"
-            prop="id">
+            prop="subjectNo">
         </el-table-column>
         <el-table-column
             label="专题名"
-            prop="name">
+            prop="subjectName">
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button
                 size="mini"
-                type="primary" plain>修改</el-button>
+                type="primary" plain @click="editTopic(scope)">修改</el-button>
             <el-button
                 size="mini"
-                type="danger" plain>删除</el-button>
+                type="danger" plain @click="deleteTopic(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <add-topic :dialog="showDialog" @closeAddTopicDialog="closeAddTopicDialog" />
+    <add-topic :dialog="showDialog" :topicData="topicData" @closeAddTopicDialog="closeAddTopicDialog" />
   </div>
 </template>
 
@@ -92,34 +92,46 @@
     },
     data() {
       return {
-        tableData: [
-          {
-            id: '12987122',
-            name: '好滋好味鸡蛋仔',
-            desc: '荷兰优质淡奶，奶香浓而不腻',
-            picGrid: [
-              {
-                picName: 'test.png',
-                picUrl: '127.0.0.1/dshgfdhbvhfdbjhfhfjhfnbfgbnfjbnknfkjbnjfdnb98hg9fdbui',
-                loginType: '0',
-                picStayTime: '5'
-              },
-              {
-                picName: 'test.png',
-                picUrl: '127.0.0.1/dshgfdhbvhfdbjhfhfjhfnbfgbnfjbnknfkjbnjfdnb98hg9fdbui',
-                loginType: '0',
-                picStayTime: '5'
-              }
-            ]
-          }
-        ],
-        showDialog: false
+        tableData: [],
+        showDialog: false,
+        topicData: {}
       }
     },
     methods: {
       closeAddTopicDialog() {
         this.showDialog = false;
+      },
+      editTopic (rowData) {
+        this.showDialog = true;
+        this.topicData = {...rowData.row};
+      },
+      deleteTopic (rowData) {
+
       }
+    },
+    mounted() {
+      this.tableData.push({
+        subjectNo: '12987122',
+        subjectName: '好滋好味鸡蛋仔',
+        articleGrid: [
+          {
+            articleNo: 'test.png',
+            articleTitle: '127.0.0.1/dshgfdhbvhfdbjhfhfjhfnbfgbnfjbnknfkjbnjfdnb98hg9fdbui',
+            articleAuthor: '0',
+            publishTime: '5',
+            articleAbstract: '',
+            articleUrl: ''
+          },
+          {
+            articleNo: 'test.png',
+            articleTitle: '127.0.0.1/dshgfdhbvhfdbjhfhfjhfnbfgbnfjbnknfkjbnjfdnb98hg9fdbui',
+            articleAuthor: '0',
+            publishTime: '5',
+            articleAbstract: '',
+            articleUrl: ''
+          }
+        ]
+      })
     }
   }
 </script>
@@ -153,8 +165,6 @@
     width: 50%;
   }
   .item-single {
-    display: inline-block;
-    max-width: 200px;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;

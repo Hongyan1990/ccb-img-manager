@@ -16,7 +16,11 @@ const routes = [
 	{
 		path: '/topic',
 		component: () => import('../views/Topic.vue')
-	}
+	},
+	// {
+	// 	path: '/edit',
+	// 	component: () => import('../views/MyEditer.vue')
+	// }
 ]
 
 export default new Router({
