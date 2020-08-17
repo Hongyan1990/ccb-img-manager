@@ -1,12 +1,13 @@
 <template>
   <el-menu
-      default-active="2"
+      default-active="1"
       class="el-menu-vertical-demo"
+      :unique-opened="true"
       @open="handleOpen"
       @close="handleClose"
       :router="true"
   >
-    <el-menu-item index="1" route="/home">
+    <el-menu-item index="1" route="/home/1">
       <i class="el-icon-menu"></i>
       <span slot="title" >App启动页</span>
     </el-menu-item>
@@ -18,11 +19,11 @@
 
       <el-submenu index="2-1">
         <template slot="title"><i class="el-icon-picture-outline"></i>对联区</template>
-        <el-menu-item index="2-1-1"><i class="el-icon-picture-outline"></i>第一屏</el-menu-item>
-        <el-menu-item index="2-1-2"><i class="el-icon-picture-outline"></i>第二屏</el-menu-item>
-        <el-menu-item index="2-1-3"><i class="el-icon-picture-outline"></i>第三屏</el-menu-item>
+        <el-menu-item index="2-1-1" route="/home/2_1_1"><i class="el-icon-picture-outline"></i>第一屏</el-menu-item>
+        <el-menu-item index="2-1-2" route="/home/2_1_2"><i class="el-icon-picture-outline"></i>第二屏</el-menu-item>
+        <el-menu-item index="2-1-3" route="/home/2_1_3"><i class="el-icon-picture-outline"></i>第三屏</el-menu-item>
       </el-submenu>
-      <el-menu-item index="2-2">
+      <el-menu-item index="2-2"  route="/home/2_2">
         <i class="el-icon-picture-outline"></i>
         <span slot="title">首页底部</span>
       </el-menu-item>
@@ -32,7 +33,7 @@
         <i class="el-icon-menu"></i>
         <span>建行</span>
       </template>
-      <el-menu-item index="3-1">
+      <el-menu-item index="3-1"  route="/home/3_1">
         <i class="el-icon-picture-outline"></i>
         <span slot="title">Banner</span>
       </el-menu-item>
@@ -42,12 +43,12 @@
         <i class="el-icon-menu"></i>
         <span>员工福利</span>
       </template>
-      <el-menu-item index="4-1">
+      <el-menu-item index="4-1"  route="/home/4_1">
         <i class="el-icon-picture-outline"></i>
         <span slot="title">Banner</span>
       </el-menu-item>
     </el-submenu>
-    <el-menu-item index="5">
+    <el-menu-item index="5"  route="/home/5">
       <i class="el-icon-menu"></i>
       <span slot="title">要览</span>
     </el-menu-item>

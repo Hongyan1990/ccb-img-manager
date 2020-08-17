@@ -9,7 +9,7 @@
 			<el-aside width="200px" style="overflow-y: auto;overflow-x: hidden; border-radius: 5px;" :style="{maxHeight: localHeight + 'px'}">
 				<oper-manager-menu></oper-manager-menu>
 			</el-aside>
-			<el-main style="padding-top: 0px;background: #fff;padding-left: 0px;margin-left: 20px;">
+			<el-main style="padding-top: 0px;background: #fff;padding-left: 0px;margin-left: 20px;border-radius: 5px;">
 				<router-view></router-view>
 			</el-main>
 		</el-container>
