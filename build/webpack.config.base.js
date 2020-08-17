@@ -6,7 +6,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 module.exports = {
 	entry: {app: path.resolve(__dirname, '../src/main.js')},
 	output: {
-		publicPath: '/dist/',
+
 		path: path.resolve(__dirname, '../dist')
 	},
 	module: {
@@ -32,16 +32,6 @@ module.exports = {
 						}
 					}
 				]
-			},
-			{
-          test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-          use: [{
-            loader: 'file-loader',
-            // options: {
-            //   outputPath: './css',
-            //   publicPath: '/css'
-            // }
-          }]
 			}
 		]
 	},

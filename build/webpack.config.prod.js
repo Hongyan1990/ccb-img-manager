@@ -23,6 +23,16 @@ const config = merge(baseConfig, {
 					},
 					'css-loader'
 				] // 提取css
+			},
+			{
+				test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+				use: [{
+					loader: 'file-loader',
+					options: {
+						outputPath: './css',
+						publicPath: './'
+					}
+				}]
 			}
 		]
 	},
@@ -30,7 +40,7 @@ const config = merge(baseConfig, {
 		// 提取css到单独文件
 		new MiniCssExtractPlugin({
 			filename: 'css/[name].[hash].css',
-			chunkFilename: '[id].[hash].css'
+			chunkFilename: 'css/[id].[hash].css'
 		})
 	],
 	optimization: {

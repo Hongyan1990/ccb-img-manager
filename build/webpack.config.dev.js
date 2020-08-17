@@ -6,7 +6,8 @@ const baseConfig = require('./webpack.config.base.js')
 const config = merge(baseConfig, {
 	mode: 'development',
 	output: {
-	    filename: '[name].bundle.js'
+		publicPath: '/dist/',
+		filename: '[name].bundle.js'
 	},
 	devServer: {
 		port: 8000,
@@ -29,6 +30,12 @@ const config = merge(baseConfig, {
 			{
 				test: /\.css$/,
 				use: ['vue-style-loader', 'css-loader']
+			},
+			{
+				test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+				use: [{
+					loader: 'file-loader'
+				}]
 			}
 		]
 	},

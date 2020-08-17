@@ -5,7 +5,8 @@ import {
   Table, TableColumn, Dialog, Input, Form, FormItem,
   Tooltip, Upload, Loading, Message, Tabs, TabPane, Avatar,
     Card, Pagination, DatePicker, Select, Option, Menu, MenuItem,
-  Drawer, Image
+  Drawer, Image, Aside, Submenu, MenuItemGroup, Breadcrumb, BreadcrumbItem,
+  Link
 } from 'element-ui'
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VePie from 'v-charts/lib/pie.common'
@@ -53,6 +54,12 @@ Vue.use(Menu)
 Vue.use(MenuItem)
 Vue.use(Drawer)
 Vue.use(Image)
+Vue.use(Aside)
+Vue.use(Submenu)
+Vue.use(MenuItemGroup)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Link)
 Vue.prototype.$message = Message
 
 Vue.use(VueQuillEditor)
