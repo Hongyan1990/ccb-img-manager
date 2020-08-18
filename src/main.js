@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import Router from 'vue-router'
 import {
   Button, Container, Header, Main, Row, Col,
@@ -6,7 +7,7 @@ import {
   Tooltip, Upload, Loading, Message, Tabs, TabPane, Avatar,
     Card, Pagination, DatePicker, Select, Option, Menu, MenuItem,
   Drawer, Image, Aside, Submenu, MenuItemGroup, Breadcrumb, BreadcrumbItem,
-  Link
+  Link, InputNumber, Radio
 } from 'element-ui'
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VePie from 'v-charts/lib/pie.common'
@@ -21,7 +22,9 @@ import App from './app.vue'
 import router from './routes/router.js'
 import cookie from './util/cookie.js'
 import './style.css'
+import createStore from './store/store.js'
 
+Vue.use(Vuex)
 Vue.use(Router)
 
 Vue.component(VeHistogram.name, VeHistogram)
@@ -60,11 +63,16 @@ Vue.use(MenuItemGroup)
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
 Vue.use(Link)
+Vue.use(InputNumber)
+Vue.use(Radio)
 Vue.prototype.$message = Message
 
 // Vue.use(VueQuillEditor)
 
+const store = createStore()
+
 new Vue({
 	router,
+  store,
 	render: h => h(App)
 }).$mount('#root')

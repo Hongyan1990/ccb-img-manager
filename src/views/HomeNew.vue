@@ -4,7 +4,7 @@
       <el-breadcrumb-item style="font-weight: bold; color: #000000;" v-for="(item, i) in menus" :key="i" >{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="my-btn-wrap">
-      <el-button size="small" type="primary" icon="el-icon-plus">新 增</el-button>
+      <el-button size="small" type="primary" icon="el-icon-plus" @click="addImg">新 增</el-button>
       <el-button size="small" type="primary" icon="el-icon-delete" plain>删 除</el-button>
       <el-button size="small" type="primary" icon="el-icon-remove-outline" plain>终 止</el-button>
     </div>
@@ -24,7 +24,26 @@
             label="标题">
         </el-table-column>
         <el-table-column
-            label="投放时间">
+            label="投放时间"
+        >
+          <template slot="header" slot-scope="scope">
+            <span
+                @click="emitDatePicker"
+                style="position: absolute; top: 50%; margin-top: -16.8px;"
+            >
+              投放时间 <span class="el-table__column-filter-trigger"><i class="el-icon-arrow-down"></i></span>
+            </span>
+            <el-date-picker
+                v-model="selectDate"
+                ref="datePicker"
+                type="datetimerange"
+                style="visibility: hidden;height: 20px;"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                @change="handleChangeDate"
+                :default-time="['12:00:00']">
+            </el-date-picker>
+          </template>
           <template slot-scope="scope">{{ scope.row.date }}</template>
         </el-table-column>
         <el-table-column
@@ -39,6 +58,8 @@
         </el-table-column>
         <el-table-column
             label="状态"
+            :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
+            :filter-method="filterTag"
             show-overflow-tooltip>
           <template slot-scope="scope">
             <span v-if="scope.row.state === '0'" style="color: #29BE99;">投放中</span>
@@ -77,6 +98,7 @@
 </template>
 
 <script>
+  import {handleMenuText} from '../util/util.js'
   export default {
     name: "HomeNew",
     components: {
@@ -106,44 +128,11 @@
         }],
         multipleSelection: [],
         currentPage4: 1,
-        menuMap: {
-          '1': {
-            'title': 'App启动页'
-          },
-          '2': {
-            'title': '首页',
-            'child': {
-              '1': {
-                'title': '对联区',
-                'child': {
-                  '1': {'title': '第一屏'},
-                  '2': {'title': '第二屏'},
-                  '3': {'title': '第三屏'},
-                }
-              },
-              '2': {
-                'title': '首页底部'
-              }
-            }
-          },
-          '3': {
-            'title': '建行',
-            'child': {
-              '1': {'title': 'Banner'}
-            }
-          },
-          '4': {
-            'title': '员工福利',
-            'child': {
-              '1': {'title': 'Banner'}
-            }
-          },
-          '5': {
-            'title': '要览'
-          },
-        },
+
         menuId: '',
-        menus: []
+        menus: [],
+        dialogVisible: false,
+        selectDate: null
       }
     },
     watch: {
@@ -151,37 +140,28 @@
         this.menuId = this.$route.params.id;
       },
       menuId() {
-        this.handleMenuText()
+        this.menus = handleMenuText(this.menuId)
       }
     },
     mounted() {
       this.menuId = this.$route.params.id;
-      this.handleMenuText();
+      this.menus = handleMenuText(this.menuId);
     },
     methods: {
+      handleChangeDate() {
+        console.log(this.selectDate)
+      },
+      emitDatePicker() {
+        this.$refs.datePicker.showPicker()
+      },
+      filterTag(value, row, column) {},
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
       handleSizeChange() {},
       handleCurrentChange() {},
-      handleMenuText() {
-        const menuArr = this.menuId.split('_');
-        let child;
-        this.menus = [];
-        for(let i=0; i<menuArr.length; i++) {
-          if(!child) {
-            this.menus.push(this.menuMap[menuArr[i]].title);
-            if(this.menuMap[menuArr[i]].child) {
-              child = this.menuMap[menuArr[i]].child
-            }
-          } else {
-            this.menus.push(child[menuArr[i]].title);
-            if(child[menuArr[i]].child) {
-              child = child[menuArr[i]].child
-            }
-          }
-        }
-        console.log(this.menus)
+      addImg() {
+        this.$router.push({path: `/add/${this.menuId}`})
       }
     }
   }
