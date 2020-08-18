@@ -7,20 +7,20 @@
           <el-button round size="mini" icon="el-icon-d-arrow-left" @click="goBack">返回</el-button>
         </div>
         <div style="padding: 20px 4%;">
-          <el-form :model="activityData" ref="addImgForm" :rules="rules">
+          <el-form v-if="pageType==='0' || pageType==='2'" :model="activityData" ref="addImgForm" :rules="rules">
             <el-form-item prop="activityName" label="活动名称：" :label-width="formLabelWidth">
               <el-input v-model="activityData.activityName" autocomplete="off" style="width: 50%;"></el-input>
+            </el-form-item>
+            <el-form-item label="广告位：" :label-width="formLabelWidth">
+              <el-breadcrumb style="line-height: unset;" separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item v-for="(item, i) in menus" :key="i" >{{item}}</el-breadcrumb-item>
+              </el-breadcrumb>
             </el-form-item>
             <el-form-item v-if="menuId==='5'" prop="emViewTitle" label="要览标题：" :label-width="formLabelWidth">
               <el-input v-model="activityData.emViewTitle" autocomplete="off"  style="width: 50%;"></el-input>
             </el-form-item>
             <el-form-item v-if="menuId==='5'" prop="emViewContent" label="要览内容：" :label-width="formLabelWidth">
               <el-input v-model="activityData.emViewContent" autocomplete="off"  style="width: 50%;"></el-input>
-            </el-form-item>
-            <el-form-item label="广告位：" :label-width="formLabelWidth">
-              <el-breadcrumb style="line-height: unset;" separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item v-for="(item, i) in menus" :key="i" >{{item}}</el-breadcrumb-item>
-              </el-breadcrumb>
             </el-form-item>
             <el-form-item prop="startTime" label="投放时间：" :label-width="formLabelWidth">
               <el-date-picker
@@ -63,9 +63,47 @@
               <el-input type="textarea" v-model="activityData.remark" autocomplete="off"  style="width: 50%;"></el-input>
             </el-form-item>
           </el-form>
-          <div class="dialog-footer">
+
+          <el-form v-else-if="pageType==='1'">
+            <el-form-item label="活动名称：" :label-width="formLabelWidth">
+              <span>{{activityData.activityName}}</span>
+            </el-form-item>
+            <el-form-item label="广告位：" :label-width="formLabelWidth">
+              <el-breadcrumb style="line-height: unset;" separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item v-for="(item, i) in menus" :key="i" >{{item}}</el-breadcrumb-item>
+              </el-breadcrumb>
+            </el-form-item>
+            <el-form-item v-if="menuId==='5'" label="要览标题：" :label-width="formLabelWidth">
+              <span>{{activityData.emViewTitle}}</span>
+            </el-form-item>
+            <el-form-item v-if="menuId==='5'" label="要览内容：" :label-width="formLabelWidth">
+              <span>{{activityData.emViewContent}}</span>
+            </el-form-item>
+            <el-form-item label="投放时间：" :label-width="formLabelWidth">
+              <span>{{activityData.startTime}}</span>
+            </el-form-item>
+            <el-form-item v-if="menuId!=='5'" label="到期时间：" :label-width="formLabelWidth">
+              <span>{{activityData.endTime}}</span>
+            </el-form-item>
+            <el-form-item v-if="menuId==='1'" label="持续时间：" :label-width="formLabelWidth">
+              <span>{{activityData.waitTime}}</span>
+            </el-form-item>
+            <el-form-item  v-if="menuId!=='5'" label="展示图片：" :label-width="formLabelWidth">
+              <span>{{activityData.picName}}</span>
+            </el-form-item>
+            <el-form-item label="推送内容(URL)：" :label-width="formLabelWidth">
+              <span>{{activityData.recmCotent}}</span>
+            </el-form-item>
+            <el-form-item label="备注：" :label-width="formLabelWidth">
+              <span>{{activityData.remark}}</span>
+            </el-form-item>
+          </el-form>
+          <div class="dialog-footer" v-if="pageType==='0' || pageType==='2'">
             <el-button type="primary" @click="addArticle">确 定</el-button>
             <el-button @click="closeArticle">取 消</el-button>
+          </div>
+          <div class="dialog-footer" v-else-if="pageType==='1'">
+            <el-button type="primary" @click="closeArticle">返  回</el-button>
           </div>
         </div>
 
@@ -102,11 +140,11 @@
         rules: {
           activityName: {required: true, message: '活动名称必填', trigger: 'change'},
           startTime: {required: true, message: '投放时间必填', trigger: 'change'},
-          endTime: {required: this.menuId!=='5', message: '到期时间必填', trigger: 'change'},
-          waitTime: {required: this.menuId==='1', message: '到期时间必填', trigger: 'change'},
-          picName: {required: this.menuId!=='5', message: '图片必填'},
-          emViewTitle: {required: this.menuId==='5', message: '要览标题必填', trigger: 'change'},
-          emViewContent: {required: this.menuId==='5', message: '要览内容必填', trigger: 'change'},
+          endTime: { message: '到期时间必填', trigger: 'change'},
+          waitTime: { message: '持续时间必填', trigger: 'change'},
+          picName: { message: '图片必填'},
+          emViewTitle: { message: '要览标题必填', trigger: 'change'},
+          emViewContent: { message: '要览内容必填', trigger: 'change'},
         },
         formLabelWidth: '120px',
         fileList: [],
@@ -126,7 +164,8 @@
         },
         menuId: '',
         menus: [],
-        localHeight: ''
+        localHeight: '',
+        pageType: ''
       }
     },
     computed: {
@@ -134,6 +173,7 @@
     watch: {
       $route() {
         this.menuId = this.$route.params.id;
+        this.pageType = this.$route.query.type;
       },
       menuId() {
         this.menus = handleMenuText(this.menuId);
@@ -173,11 +213,26 @@
       },
       goBack() {
         this.$router.push({path: `/app/home/${this.menuId}`})
+      },
+      setValidate() {
+        if(this.menuId === '5') {
+          this.rules.emViewTitle = {...this.rules.emViewTitle, required: true};
+          this.rules.emViewContent = {...this.rules.emViewContent, required: true};
+        }
+        if(this.menuId !== '5') {
+          this.rules.endTime = {...this.rules.endTime, required: true};
+          this.rules.picName = {...this.rules.picName, required: true};
+        }
+        if(this.menuId === '1') {
+          this.rules.waitTime = {...this.rules.waitTime, required: true};
+        }
       }
     },
     mounted() {
       this.menuId = this.$route.params.id;
+      this.pageType = this.$route.query.type;
       this.menus = handleMenuText(this.menuId);
+      this.setValidate();
       this.activityData.adPosition = getMenuId(this.menuId);
     }
   }
@@ -196,5 +251,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   }
 </style>

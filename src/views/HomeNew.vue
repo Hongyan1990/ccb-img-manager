@@ -72,10 +72,10 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <div style="line-height: 20px">
-              <el-link type="primary">详情</el-link>
+              <el-link type="primary" @click="linkRouter('1')">详情</el-link>
               <span class="my-fen">|</span>
               <el-link type="primary" v-if="scope.row.state === '0'">终止</el-link>
-              <el-link type="primary" v-else-if="scope.row.state === '1'">编辑</el-link>
+              <el-link type="primary" v-else-if="scope.row.state === '1'"  @click="linkRouter('2')">编辑</el-link>
               <el-link type="primary" v-else-if="scope.row.state === '2'||scope.row.state === '3'">删除</el-link>
             </div>
 
@@ -161,7 +161,10 @@
       handleSizeChange() {},
       handleCurrentChange() {},
       addImg() {
-        this.$router.push({path: `/add/${this.menuId}`})
+        this.$router.push({path: `/add/${this.menuId}`, query: {type: '0'}})
+      },
+      linkRouter(type) {
+        this.$router.push({path: `/add/${this.menuId}`, query: {type}})
       }
     }
   }
